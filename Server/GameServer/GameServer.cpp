@@ -35,7 +35,7 @@ int CClientSession::OnDispatch(CNtlPacket * pPacket)
 {
 	CGameServer * app = (CGameServer*) NtlSfxGetApp();
 	sNTLPACKETHEADER * pHeader = (sNTLPACKETHEADER *)pPacket->GetPacketData();
-	//printf("~~~ opcode %i received ~~~ \n", pHeader->wOpCode);
+	////printf("~~~ opcode %i received ~~~ \n", pHeader->wOpCode);
 
 	switch( pHeader->wOpCode )
 	{

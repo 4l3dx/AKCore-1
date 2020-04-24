@@ -196,7 +196,7 @@ public:
 	void						SendDragonBallCheckReq(CNtlPacket * pPacket, CGameServer * app);
 	void						SendDragonBallRewardReq(CNtlPacket * pPacket, CGameServer * app);
 	// SKILL
-	void						SendCharSkillAction(CNtlPacket * pPacket, CGameServer * app);
+	void						SendCharSkillAction(CNtlPacket * pPacket, CGameServer * app, int m_uiSkillTblId);
 	void						SendCharSkillRes(CNtlPacket * pPacket, CGameServer * app);
 	//Game Server functions
 	sGU_OBJECT_CREATE			characterspawnInfo;

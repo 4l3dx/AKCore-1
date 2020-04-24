@@ -2690,14 +2690,31 @@ void CClientSession::SendCharSkillRes(CNtlPacket * pPacket, CGameServer * app)
 	packet.SetPacketLen(sizeof(sGU_CHAR_SKILL_RES));
 	int rc = g_pApp->Send(this->GetHandle(), &packet);
 	app->UserBroadcastothers(&packet, this);
+
+	printf("\nSkill Target Count: %d",pCharSkillReq->byApplyTargetCount);
+	printf("\nAvatar Type: %d",pCharSkillReq->byAvatarType);
+	printf("\nRP Bonus Type: %d",pCharSkillReq->byRpBonusType);
+	printf("\nSkill Slot ID: %d",pCharSkillReq->bySlotIndex);
+
+	app->db->prepare("SELECT skill_id FROM skills WHERE owner_id = ? AND SlotID = ?");
+	app->db->setInt(1,this->plr->pcProfile->charId);
+	app->db->setInt(2,pCharSkillReq->bySlotIndex);
+	app->db->execute();
+	app->db->fetch();
+
+	int m_uiSkillTblId = app->db->getInt("skill_id");
+
+	printf("\nSkill ID:%u",m_uiSkillTblId);
+
+	SendCharSkillAction(pPacket,app,m_uiSkillTblId);
 }
 //--------------------------------------------------------------------------------------//
 //		Char Skill Send
 //--------------------------------------------------------------------------------------//
-void CClientSession::SendCharSkillAction(CNtlPacket * pPacket, CGameServer * app)
+void CClientSession::SendCharSkillAction(CNtlPacket * pPacket, CGameServer * app, int m_uiSkillTblId)
 {
 	printf("SEND SKILL\n");
-/*	CSkillTable *pSkillTbl = app->g_pTableContainer->GetSkillTable();
+	CSkillTable *pSkillTbl = app->g_pTableContainer->GetSkillTable();
 	sSKILL_TBLDAT *pSkillTblData = reinterpret_cast<sSKILL_TBLDAT*>(pSkillTbl->FindData(m_uiSkillTblId));
 
 	CNtlPacket packet(sizeof(sGU_CHAR_ACTION_SKILL));
@@ -2727,5 +2744,5 @@ void CClientSession::SendCharSkillAction(CNtlPacket * pPacket, CGameServer * app
 
 	packet.SetPacketLen(sizeof(sGU_CHAR_ACTION_SKILL));
 	int rc = g_pApp->Send(this->GetHandle(), &packet);
-	app->UserBroadcastothers(&packet, this);*/
+	app->UserBroadcastothers(&packet, this);
 }
